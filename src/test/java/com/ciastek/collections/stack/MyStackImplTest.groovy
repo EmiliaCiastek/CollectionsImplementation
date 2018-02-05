@@ -6,12 +6,12 @@ import spock.lang.Specification
 class MyStackImplTest extends Specification {
 
     @Shared
-    MyStack stack
+    MyStack<String> stack
     @Shared
     String firstElement = "Element"
 
     def setup() {
-        stack = new MyStackImpl()
+        stack = new MyStackImpl<>()
     }
 
     def "should empty return true when stack is created"() {
@@ -98,5 +98,52 @@ class MyStackImplTest extends Specification {
         int distance = stack.search(firstElement)
         then:
         distance == 1
+    }
+
+    def "should return -1 when searching empty stack"() {
+        when:
+        int distance = stack.search("element not on stack")
+        then:
+        distance == -1
+    }
+
+    def "should return -1 when searching absent element"() {
+        given:
+        stack.push(firstElement)
+        when:
+        int distance = stack.search("element not on stack")
+        then:
+        distance == -1
+    }
+
+    def "should return distance to top when search"(String elementToSearch, int distance) {
+        setup:
+        stack.push("some element")
+        stack.push("other element")
+        stack.push("ono more element")
+        stack.push(firstElement)
+        expect:
+        stack.search(elementToSearch) == distance
+
+        where:
+        elementToSearch    | distance
+        "some element"     | 4
+        "other element"    | 3
+        "ono more element" | 2
+    }
+
+    def "should stack be generic"() {
+        given:
+        MyStack<Integer> intStack = new MyStackImpl<>()
+        Integer element = 5
+        Integer secondElement = 10
+        intStack.push(element)
+        intStack.push(secondElement)
+        when:
+        Integer popped = intStack.pop()
+        Integer peeked = intStack.peek()
+        then:
+        popped == secondElement
+        peeked == element
     }
 }

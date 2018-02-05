@@ -1,72 +1,84 @@
 package com.ciastek.collections.stack;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.EmptyStackException;
 
-public class MyStackImpl implements MyStack {
-  private Node top;
-  private boolean isEmpty = true;
+public class MyStackImpl<E> implements MyStack<E> {
+    private Node<E> top;
+    private boolean isEmpty = true;
 
-  @Override
-  public String push(String element) {
-    if (isEmpty) {
-      top = new Node(element);
-    } else {
-      top = new Node(element, top);
+    @Override
+    public E push(E element) {
+        if (isEmpty) {
+            top = new Node<>(element);
+        } else {
+            top = new Node<>(element, top);
+        }
+
+        isEmpty = false;
+        return element;
     }
 
-    isEmpty = false;
-    return element;
-  }
+    @Override
+    public E pop() {
+        if (isEmpty) {
+            throw new EmptyStackException();
+        }
 
-  @Override
-  public String pop() {
-    if (isEmpty) {
-      throw new EmptyStackException();
+        Node<E> currentTop = top;
+        top = currentTop.previousNode;
+        isEmpty = top == null;
+
+        return currentTop.nodeValue;
     }
 
-    Node currentTop = top;
-    top = currentTop.previousNode;
-    isEmpty = top == null;
+    @Override
+    public E peek() {
+        if (isEmpty) {
+            throw new EmptyStackException();
+        }
 
-    return currentTop.nodeValue;
-  }
-
-  @Override
-  public String peek() {
-    if (isEmpty) {
-      throw new EmptyStackException();
+        return top.nodeValue;
     }
 
-    return top.nodeValue;
-  }
-
-  @Override
-  public boolean empty() {
-    return isEmpty;
-  }
-
-  @Override
-  public int search(String element) {
-    if(element.equals(top.nodeValue)){
-      return 1;
+    @Override
+    public boolean empty() {
+        return isEmpty;
     }
 
-    throw new NotImplementedException();
-  }
+    @Override
+    public int search(E element) {
+        if (isEmpty) {
+            return -1;
+        } else if (element.equals(top.nodeValue)) {
+            return 1;
+        } else {
+            Node currentNode = top;
+            int counter = 1;
+            while (currentNode.hasPrevious){
+                currentNode = currentNode.previousNode;
+                counter++;
+                if(currentNode.nodeValue.equals(element)){
+                    return counter;
+                }
+            }
+        }
 
-  private class Node {
-    private String nodeValue;
-    private Node previousNode;
-
-    Node(String nodeValue, Node previousNode) {
-      this.nodeValue = nodeValue;
-      this.previousNode = previousNode;
+        return -1;
     }
 
-    Node(String nodeValue) {
-      this(nodeValue, null);
+    private class Node<E> {
+        private E nodeValue;
+        private Node<E> previousNode;
+        private boolean hasPrevious = true;
+
+        Node(E nodeValue, Node<E> previousNode) {
+            this.nodeValue = nodeValue;
+            this.previousNode = previousNode;
+        }
+
+        Node(E nodeValue) {
+            this(nodeValue, null);
+            hasPrevious = false;
+        }
     }
-  }
 }
