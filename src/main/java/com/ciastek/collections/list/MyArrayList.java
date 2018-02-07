@@ -2,7 +2,6 @@ package com.ciastek.collections.list;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 public class MyArrayList implements MyList {
@@ -18,13 +17,8 @@ public class MyArrayList implements MyList {
     }
 
     @Override
-    public boolean remove(Integer element) {
-        throw new NotImplementedException();
-    }
-
-    @Override
     public Integer get(int index) {
-        if(index < size){
+        if (index < size) {
             return elements[index];
         }
 
@@ -43,25 +37,43 @@ public class MyArrayList implements MyList {
 
     @Override
     public boolean contains(Integer element) {
-        if (element == null){
+        if (element == null) {
             return false;
         }
 
         for (int i = 0; i < size; i++) {
-            if(elements[i].equals(element)){
+            if (elements[i].equals(element)) {
                 return true;
             }
         }
+
         return false;
     }
 
     @Override
-    public boolean addAll(Collection<Integer> collection) {
+    public Integer set(int index, Integer element) {
+        if(index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        Integer previousElement = elements[index];
+        elements[index] = element;
+
+        return previousElement;
+    }
+
+    @Override
+    public int indexOf(Integer element) {
         throw new NotImplementedException();
     }
 
     @Override
-    public Integer set(int index, Integer element) {
+    public int lastIndexOf(Integer element) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public boolean addAll(Collection<Integer> collection) {
         throw new NotImplementedException();
     }
 
@@ -71,12 +83,7 @@ public class MyArrayList implements MyList {
     }
 
     @Override
-    public int indexOf(Integer o) {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    public int lastIndexOf(Integer o) {
+    public boolean remove(Integer element) {
         throw new NotImplementedException();
     }
 }

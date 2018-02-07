@@ -97,9 +97,39 @@ public class MyArrayListTest {
     @Test
     public void should_return_false_when_contains_invoked_with_null(){
         list.add(5);
-        Integer elementToFind = null;
 
-        assertFalse(list.contains(elementToFind));
+        assertFalse(list.contains(null));
     }
 
+    @Test(expectedExceptions = IndexOutOfBoundsException.class)
+    public void should_throw_exception_when_set_invoked_with_not_existing_index(){
+        list.add(5);
+        Integer newElement = 10;
+
+        list.set(1, newElement);
+    }
+
+    @Test
+    public void should_change_element_when_set_invoked_with_existing_index(){
+        list.add(5);
+        Integer newElement = 10;
+        int index = 0;
+
+        list.set(index, newElement);
+        Integer actualElement = list.get(index);
+
+        assertThat(actualElement).isEqualTo(newElement);
+    }
+
+    @Test
+    public void should_return_previous_element_when_set(){
+        Integer firstElement = 5;
+        list.add(firstElement);
+        Integer newElement = 10;
+        int index = 0;
+
+        Integer previousElement = list.set(index, newElement);
+
+        assertThat(previousElement).isEqualTo(firstElement);
+    }
 }
